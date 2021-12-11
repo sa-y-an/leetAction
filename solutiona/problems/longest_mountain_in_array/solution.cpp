@@ -1,45 +1,49 @@
 class Solution {
 public:
-    int longestMountain(vector<int>& arr) {
+    int longestMountain(vector<int>& array) {
 
-	int max_height = 0 ;
-	if ( arr.size() < 3 ) return 0; // for arr size smaller than 3
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
 
-	int down_height = 0, up_height=0;
-	int n = arr.size();
-
-	int i=1;
-
-	while ( i< n ) {
-
-
-		if( arr[i] == arr[i-1] ) {
-			i++;
-			continue;
-		}
-
-		down_height = 0 , up_height=0;
-
-		while( i < n and  arr[i] > arr[i-1] ) {
-			up_height++;
-			i++;
-		}
-
-		while( i < n and arr[i] < arr[i-1]) {
-			down_height++;
-			i++;
-		}
-
-		
-
-		if( down_height>0 and up_height > 0 ) max_height = max(max_height, (down_height+up_height+1));
-
-
-
-
-	}
+        
+        
+    if(array.size() < 3) return 0;
+        
+	int maxPeakHeight = 0;
+	int i =1;
+    
+        
+	while( i < array.size() ){
 	
-	return max_height;
+    int increment = 0;
+    int decrement = 0 ;
+        
+        
+        if( i<array.size() and array[i] == array[i-1] ) {
+            i++;
+            continue;
+        }
+
+     
+        while( i < array.size() and array[i] > array[i-1] )	{
+            increment++;
+            i++;
+        }
+      
+        
+        while( i < array.size() and array[i] < array[i-1] )	{
+            decrement++;
+            i++;
+        }
+
+        if( increment > 0  and decrement > 0 ) {
+            maxPeakHeight = max(maxPeakHeight, (increment+decrement+1));
+        }
+
+    }
+        
+    return maxPeakHeight;
         
         
     }
