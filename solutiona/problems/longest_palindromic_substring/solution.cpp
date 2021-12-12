@@ -1,7 +1,12 @@
 class Solution {
 public:
     string longestPalindrome(string s) {
+        
+    // ios_base::sync_with_stdio(false);
+    // cin.tie(0);
+    // cout.tie(0);
 
+        
 	if( s.size()<2 ){
 		return s;
 	}
