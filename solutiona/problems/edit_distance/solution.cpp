@@ -8,30 +8,33 @@ public:
 
     
     
-    
-    int minDistance(string str1, string str2) {
+    int minDistance(string word1, string word2) {
         
-         vector < vector <int> > dp(str2.size()+1, vector <int>(str1.size()+1,0));
-
-        for( int i = 0 ; i < str2.size()+1 ; i++ ){
-            dp[i][0] = i;
+        vector <vector<int>> editDistance ( word1.size()+1 , vector <int> (word2.size()+1,0) );
+        const int ylim = word1.size()+1;
+        const int xlim = word2.size()+1;
+        
+        for( int y = ylim-1 ; y >= 0 ; y-- ){
+            editDistance[y][xlim-1] = ylim-y-1;
         }
-
-        for( int i = 0 ; i < str1.size()+1 ; i++ ){
-            dp[0][i] = i;
+        
+        for( int x = xlim - 1 ; x >= 0 ; x-- ){
+            editDistance[ylim-1][x] = xlim-x-1;
         }
-
-        for( int j = 1 ; j < str2.size()+1 ; j++ ) {
-            for( int i = 1 ; i < str1.size()+1 ; i++ ){
-                if( str2[j-1] == str1[i-1] ) dp[j][i] = dp[j-1][i-1];
+        
+        for( int y = ylim-2; y >= 0 ; y-- ){
+            for( int x = xlim-2 ; x >= 0 ; x--  ){
+                if( word1[y] == word2[x] ){
+                    editDistance[y][x] = editDistance[y+1][x+1];
+                }
                 else {
-                    dp[j][i] = 1+ min( min(dp[j-1][i],dp[j][i-1]), dp[j-1][i-1] );
+                    editDistance[y][x] = 1 + min( min(editDistance[y+1][x], editDistance[y][x+1]),
+                                                 editDistance[y+1][x+1]);
                 }
             }
         }
-
-
-      return dp[str2.size()][str1.size()];
         
+                                                 
+      return editDistance[0][0];
     }
 };
