@@ -1,30 +1,18 @@
 class Solution {
 public:
-    Solution(){
-        ios_base::sync_with_stdio(false);
-        cin.tie(0);
-        cout.tie(0);        
-    }
-
-    
     vector<vector<int>> subsets(vector<int>& nums) {
-        
-        vector <vector<int> > dp;
-        dp.push_back({});
-        
-        for( auto num : nums ){
-            
-            int n = dp.size();
-            
-            for( int i = 0 ; i < n ; i++ ){
-                auto temp = dp[i];
-                temp.push_back(num);
-                dp.push_back(temp);
-            }
-            
-        }
-        
-            
-        return dp;
+	long long n = nums.size();
+	n = 1<<n;
+	vector<vector<int>> ret;
+	for( long long i = 0 ; i < n ; i++){
+		vector <int> temp;
+		for( long long j = 10 ; j >= 0 ; j--){
+			if( ((i>>j)&1) == 1 ) temp.push_back(nums[j]);
+		}
+		ret.push_back(temp);
+
+	}
+
+	return ret;        
     }
 };
