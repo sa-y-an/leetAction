@@ -1,21 +1,20 @@
+
+int _IO =[](){
+    std :: ios :: sync_with_stdio (0);
+    cin.tie (0);
+    return 0;
+ }();
+
 class Solution {
-public:
+public:  
     int majorityElement(vector<int>& nums) {
-        
-        unordered_map <int,int> elements;
-
-        for ( int num : nums ){
-            elements[num]++;
+        int cnt = 0, candidate = 0;     
+        for(auto num : nums ){
+            if(cnt == 0 ) candidate = num;
+            if( num == candidate ) cnt += 1;
+            else cnt -= 1;
         }
-
-        int majority = nums.size()/2;
-        cout<<majority<<" ";
-        for( auto it : elements) {
-            cout<<it.first<<" "<<it.second<<"\n";
-            if( it.second > majority) return it.first;
-        }
-
-        return 1;
         
+        return candidate;
     }
 };
