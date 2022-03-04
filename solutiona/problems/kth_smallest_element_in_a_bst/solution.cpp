@@ -12,43 +12,30 @@
 class Solution {
 public:
     
-    Solution(){
-        ios_base::sync_with_stdio(false);
-        cin.tie(0);
-        cout.tie(0);        
-    }
-
+    int res;
+    int time;
     
-    struct retvalues {
-	int k;
-	int ksmallest;   
-    };
+    void inorder(TreeNode*root){
+        
+        if( not root or time == 0 ) return;
+        
     
-
-    void InorderTraversal(TreeNode *tree, retvalues & ret) {
-
-        if ( not tree ) return ;
-
-        InorderTraversal(tree->left, ret) ;
-
-        if( ret.k <= 0 ) return;
-
-        ret.ksmallest = tree->val;
-        ret.k -= 1;
-
-        InorderTraversal(tree->right, ret);
-
+        inorder(root->left);
+        time--;
+        if( time == 0 ) {
+            res = root->val;
+            return;
+        }
+        
+        inorder(root->right);
+        
+        
     }
-
     
     int kthSmallest(TreeNode* root, int k) {
-        retvalues ret;
-	
-        ret.k = k;
-	
-	    InorderTraversal(root,ret);
-       
-        return ret.ksmallest;
+        time = k;
+        inorder(root);
+        return res;
         
     }
 };
