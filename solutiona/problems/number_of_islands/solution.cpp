@@ -1,64 +1,55 @@
-int X,Y;
-struct children{
-    int x;
-    int y;
-
-    children(int x,int y){
-        this->x = x;
-        this->y = y;
-    }
-
-    bool validMove(vector < vector <bool> > &visited){
-       if( y >= Y or x >= X or y < 0 or x < 0 ) return false; 
-       if( visited[y][x] ) return false;
-       return true;
-    }
-};
-
+vector <pair <int,int>> mover = {{-1,0},{0,-1},{0,1},{1,0}};
+int X, Y;
+bool visited[310][310];
 
 class Solution {
-    vector <pair <int,int>> mover;
-    
 public:
-    
-    Solution() {
-        ios_base::sync_with_stdio(false);
-        cin.tie(0);
-        cout.tie(0);        
+        
+    struct children{
 
-        mover = {{1,0},{0,1},{-1,0},{0,-1}};
-    }
-    
-    void dfs( vector<vector<char>>& grid ,vector < vector <bool> > &visited, int y, int x){
-        
-        if( y >= Y or x >= X or y < 0 or x < 0 ) return;
-        if( grid[y][x] == '0') return;
-        visited[y][x] = true;
-        
-        for( auto move : mover){
-            children child(x+move.first, y+move.second);
-            if ( child.validMove(visited) ) dfs(grid,visited,child.y,child.x);            
+        int x;
+        int y;
+        children(int _x , int _y ){
+            x = _x, 
+            y = _y;
         }
+
+        bool isValid(vector<vector<char>>& grid){
+            if( x < 0 or y < 0 or x >= X or y >= Y ) return false;
+            if( visited[y][x]) return false;
+            if( grid[y][x] == '0') return false;
+            return true;
+        }
+
+    };
+    
+    
         
+    void dfs(int x, int y,vector<vector<char>>& grid){
+        visited[y][x] = true;
+        for( auto move : mover ){
+            children child(x+move.first, y+move.second);
+            if ( not child.isValid(grid)) continue;
+            dfs(child.x, child.y, grid);
+        }   
     }
     
     int numIslands(vector<vector<char>>& grid) {
         
-        Y = grid.size() , X = grid[0].size();        
-        vector <vector <bool>> visited(Y, vector <bool> (X, false));
+        memset(visited, false, sizeof(visited));
         
-        int dfsCount = 0 ;
-        for( int y = 0 ; y < Y ; y++ ){
+        int cntDfs = 0;
+        X = grid[0].size(), Y = grid.size();
+        
+        for(int y = 0 ; y < Y ; y++){
             for( int x = 0 ; x < X ; x++){
-                if( grid[y][x] == '1') {
-                    if( visited[y][x] ) continue;
-                    dfs(grid, visited, y, x);
-                    dfsCount++;
-                }
+                if( visited[y][x] or grid[y][x] == '0') continue;
+                dfs(x,y,grid);
+                cntDfs++;
             }
         }
-                
         
-        return dfsCount;
+        return cntDfs;
+        
     }
 };
