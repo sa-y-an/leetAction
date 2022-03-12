@@ -8,38 +8,45 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
+
+struct Compare{
+    bool operator() (ListNode* a, ListNode* b){
+        return a->val > b->val;
+    }
+};
+
 class Solution {
 public:
     
-ListNode *mergeTwoLists(ListNode *l1, ListNode *l2) {
-    if(l1 == nullptr){
-        return l2;
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        
+        priority_queue < ListNode* , vector<ListNode*> , Compare > pq;
+        const int n = lists.size();
+        ListNode* curr = nullptr;
+        
+        for( int i = 0 ; i < n ; i++){
+            if( lists[i]) pq.push(lists[i]);
+        }
+        
+        if( pq.empty()) return curr;
+        
+        ListNode* head;
+        curr = pq.top();
+        head = curr;
+        pq.pop();
+        
+        if( curr->next ) pq.push(curr->next);
+        ListNode* prev = curr;
+        
+        while( not pq.empty()){
+            curr = pq.top();
+            pq.pop();
+            prev->next = curr;
+            if( curr->next ) pq.push(curr->next);
+            prev = curr;
+        }
+        
+        curr->next = nullptr;
+        return head;
     }
-    if(l2 == nullptr){
-        return l1;
-    }
-    if(l1->val <= l2->val){
-        l1->next = mergeTwoLists(l1->next, l2);
-        return l1;
-    }
-    else{
-        l2->next = mergeTwoLists(l1, l2->next);
-        return l2;
-    }
-}
-
-    
-    
-ListNode *mergeKLists(vector<ListNode *> &lists) {
-    if(lists.empty()){
-        return nullptr;
-    }
-    while(lists.size() > 1){
-        lists.push_back(mergeTwoLists(lists[0], lists[1]));
-        lists.erase(lists.begin());
-        lists.erase(lists.begin());
-    }
-    return lists.front();
-}
-
 };
