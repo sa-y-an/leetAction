@@ -19,6 +19,7 @@ public:
             st.pop();
         }
         
+        
         string builder;
         for( int i = 0 ; i < s.size(); i++){
             if( toSkip.find(i) != toSkip.end()) continue;
