@@ -1,16 +1,26 @@
 class Solution {
 public:
-    int lengthOfLongestSubstring(string s) {
-        vector <int> mpp(256,-1);
-        int l = 0 , r = 0 ;
+    int lengthOfLongestSubstring(string& s) {
+        
+        int l = 0, r= 0;
         const int n = s.size();
-        int len = 0;
+        int ans = 0;
+        unordered_set <char> st;
         while( r < n ){
-            if( mpp[s[r]] != -1 ) l = max( l, mpp[s[r]]+1);
-            mpp[s[r]] = r;
-            len = max(len, r-l+1);
-            r++;
+            while( r < n and st.count(s[r]) == 0 ){
+                st.insert(s[r]);
+                r++;
+                ans = max(ans, r-l);
+            }
+            while( l <= r and s[l] != s[r]) {
+                st.erase(s[l]);
+                l++;
+            }
+            st.erase(s[l]);
+            l++;
         }
-        return len;
+        
+        return ans;
+        
     }
 };
