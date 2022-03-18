@@ -11,52 +11,19 @@
 class Solution {
 public:
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-        
-          
-        auto n3 = new ListNode;
-        
-        n3->val = (l1->val+ l2->val)%10;
-        n3->next = NULL;
-        
-        auto l3 = n3;
-        
-        auto n1 = l1->next;
-        auto n2 = l2->next;
-        
-        
-        int sum = (l1->val+ l2->val)/10;
-
-        while(n1 || n2 || sum>0 ){
+        ListNode preHead(-1), *prev = &preHead;
+        int carry = 0;
+        while( l1 or l2 or carry ){
             
-            auto it = new ListNode;
-            it->next = NULL;
+            int sum = (l1 ? l1->val : 0 ) + ( l2 ? l2->val : 0 ) + carry;
+            prev->next = new ListNode(sum%10);
+            carry = sum/10;
+            prev = prev->next;
             
-            if(n1){
-                
-                sum += n1->val;
-                n1 = n1->next;
-              
-            }
-            
-            if(n2){
-                
-                sum += n2->val;
-                n2 = n2->next;
-                
-            }
-            
-            it->val = sum%10;
-            sum /= 10;
-                                
-            n3 -> next = it;
-            n3 = it;
-            
-                 
+            l1 = l1 ? l1->next : l1;
+            l2 = l2 ? l2->next : l2;
         }
         
-         
-        return l3;
-        
-        
+        return preHead.next;
     }
 };
