@@ -1,20 +1,28 @@
+/*
+The states in the recursion are -
+1. chosen 
+2. index 
+*/
+
 class Solution {
+    vector <vector<int>> ans;
+    vector <int> chosen;
 public:
+    
+    
+    void generate(vector <int> & nums, int idx=0 ){
+        if( idx > nums.size()-1 ){
+            ans.push_back(chosen);
+            return;
+        } 
+        chosen.push_back(nums[idx]);
+        generate(nums, idx+1);
+        chosen.pop_back();
+        generate(nums, idx+1);
+    }
+    
     vector<vector<int>> subsets(vector<int>& nums) {
-        vector <vector <int> > ret;
-        const int n = pow(2,nums.size());
-        for( int i = 0 ; i < n ; i++){
-            // loop through the binary 
-            // print 1 where it is 1
-            vector <int> temp;
-            for( int d = 31 ; d >= 0 ; d--){
-                int idx = ((i>>d)&1);
-                if( idx ) temp.push_back(nums[d]);
-            }
-            
-            ret.push_back(temp);
-        }
-        
-        return ret;
+        generate(nums);
+        return ans;
     }
 };
