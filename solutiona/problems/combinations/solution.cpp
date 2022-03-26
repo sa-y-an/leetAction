@@ -1,31 +1,28 @@
 class Solution {
+    vector <vector <int>> ans;
+    vector <int> chosen;
+    int K;
+    int N;
 public:
     
-    vector <int> nums;
-    vector <int> chosen;
-    vector < vector <int> > ans;
-    int maxSize;
-    
-    void formCombinations(int idx){
-        if( idx < 0 ) return;
-        if( chosen.size() == maxSize){
+    void findCombinations(int idx= 0 ){
+        
+        if( chosen.size() == K ) {
             ans.push_back(chosen);
             return;
         }
- 
-        chosen.push_back(idx);
-        formCombinations(idx-1);
-        chosen.pop_back();
-        formCombinations(idx-1);
+        if( chosen.size() > K or idx >= N) return;
         
+        chosen.push_back(idx+1);
+        findCombinations(idx+1);
+        
+        chosen.pop_back();
+        findCombinations(idx+1);
     }
     
     vector<vector<int>> combine(int n, int k) {
-        maxSize = k;
-        for( int i = 1 ; i <= n ; i++)
-            nums.push_back(i);
-        formCombinations(n);
+        K = k, N = n;
+        findCombinations();        
         return ans;
-            
     }
 };
