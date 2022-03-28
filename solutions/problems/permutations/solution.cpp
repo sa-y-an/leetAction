@@ -1,27 +1,20 @@
 class Solution {
-    vector <vector <int>> ans;
-     
+    vector <vector<int>> ans;
 public:
-    void genPermute(vector <int> & nums, vector <int> chosen = {}){
-        
-        if( nums.size() == 0) {
-            ans.push_back(chosen);
-            return;
+    
+    void permHelper(vector <int> & nums, const int idx = 0 ){
+        if( idx == nums.size()-1 and nums.size() ) ans.push_back(nums);
+        else {
+            for( int i = idx ; i < nums.size() ; i++){
+                swap(nums[i],nums[idx]);
+                permHelper(nums,idx+1);
+                swap(nums[i],nums[idx]);
+            }
         }
-        
-        for( int i = nums.size()-1 ; i >= 0 ; i--){
-            int poppedVal = nums[i];
-            chosen.push_back(nums[i]);
-            nums.erase(nums.begin()+i);
-            genPermute(nums, chosen);
-            chosen.pop_back();
-            nums.insert(nums.begin()+i, poppedVal);
-        }
-        
     }
     
     vector<vector<int>> permute(vector<int>& nums) {
-        genPermute(nums);
+        permHelper(nums);
         return ans;
     }
 };
