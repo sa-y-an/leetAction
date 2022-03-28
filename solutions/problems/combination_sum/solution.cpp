@@ -1,28 +1,23 @@
 class Solution {
-public:
-    
-    void ifPossible(vector<vector<int>> &com, vector<int> &candidates, int target, int idx, vector <int> chosen = {} ){
-        
-        if(target == 0) {
-            com.push_back(chosen);
+    vector <vector <int>> ans;
+    vector <int> chosen;
+public:    
+    void combine(vector <int> & candidates, int target, int idx = 0){
+        if( target < 0 ) return;
+        if( target == 0) {
+            ans.push_back(chosen);
             return;
         }
-      
-        if( target - candidates[idx] >= 0 ){
-            chosen.push_back(candidates[idx]);
-            ifPossible(com,candidates,target-candidates[idx],idx,chosen);
-            chosen.pop_back();
-        }
+        if( idx >= candidates.size() ) return ;
         
-        if( idx >= 1 ) {
-            ifPossible(com,candidates,target,idx-1,chosen);
-        }
-        
+        chosen.push_back(candidates[idx]);
+        combine(candidates, target-candidates[idx], idx);
+        chosen.pop_back();
+        combine(candidates, target, idx+1);
     }
     
     vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
-        vector <vector <int>> ret;
-        ifPossible(ret,candidates,target,candidates.size()-1);
-        return ret;
+        combine(candidates,target);
+        return ans;      
     }
 };
