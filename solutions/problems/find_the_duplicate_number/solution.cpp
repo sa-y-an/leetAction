@@ -1,17 +1,11 @@
 class Solution {
+    unordered_set <int> uset;
 public:
-    int findDuplicate(vector<int>& array) {	
-	
-    ios_base::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
-
-	for( int i = 0 ; i < array.size() ; i++ ){	
-		if(array[abs(array[i])-1] < 0 ) return abs(array[i]);			
-		array[abs(array[i])-1] *= -1;
-	}
-	
-	return -1;
-        
+    int findDuplicate(vector<int>& nums) {
+        for( auto num :nums ){
+            if( uset.count(num) > 0 ) return num;
+            uset.insert(num);
+        }
+        return -1;
     }
 };
