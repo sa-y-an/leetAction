@@ -1,41 +1,25 @@
 class Solution {
 public:
     void setZeroes(vector<vector<int>>& matrix) {
-        
-        unordered_set <int> zeroRow, zeroColumn;
-        
-        for(int row = 0 ; row < matrix.size() ; ++row ) {
-            for(int column = 0 ; column < matrix[row].size() ; ++column ){
-                if( matrix[row][column] == 0 ) {
-                    zeroRow.insert(row);
-                    zeroColumn.insert(column);
+        bool row = false, col = false;
+        for(int i = 0; i < matrix.size(); i++){
+            for(int j = 0; j < matrix[0].size(); j++){
+                if(matrix[i][j] == 0) {
+                    if(i == 0) row = true;
+                    if(j == 0) col = true;
+                    matrix[0][j] = matrix[i][0] = 0;
                 }
             }
         }
-        
-        // making rows zero 
-        
-        for( auto row : zeroRow ){
+        for(int i = 1; i < matrix.size(); i++)
+            for(int j = 1; j < matrix[0].size(); j++)
+                if(matrix[i][0] == 0 || matrix[0][j] == 0) matrix[i][j] = 0;
             
-            for( int i = 0 ; i < matrix[row].size() ; i++ ){
-                matrix[row][i] = 0 ;
-            }
-            
-        }
         
-        // for columns
+        if(col) for(int i = 0; i < matrix.size(); i++) matrix[i][0] = 0;
         
-        for( auto column : zeroColumn ){
-            
-            for( int i = 0 ; i < matrix.size() ; i++ ){
-                matrix[i][column] = 0 ;
-            }
-            
-        }
+        if(row) for(int j = 0; j < matrix[0].size(); j++) matrix[0][j] = 0;
         
-        
-        
-        
-        
+
     }
 };
