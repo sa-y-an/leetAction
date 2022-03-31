@@ -1,41 +1,26 @@
 class Solution {
+    int smallest_num;
 public:
-
-    bool isPossible(vector<int> &pages, int studentsCnt, int limit){
-
-        int n = pages.size(),
-            idx = 0,
-            loopRan = 0;
-        
+    bool can_form_m_grps(vector <int>& nums, int m, const int max_sum){
+        if( smallest_num > max_sum ) return false;
+        int curr_sum = 0, grps = 0, idx = 0 , n = nums.size();
         while( idx < n ){
-            int page = 0;
-            int prev = idx;
-            while( idx < n and page + pages[idx] <= limit )	page += pages[idx++];
-            if ( idx == prev ) return false;
-            loopRan++;
+            while( idx < n and curr_sum + nums[idx] <= max_sum ) curr_sum += nums[idx] , idx++;
+            if( curr_sum == 0 ) return false;
+            curr_sum = 0, grps++;
         }
-
-        return loopRan <= studentsCnt;
-
+        return grps <= m;
     }
-
-
-    int splitArray(vector<int>& pages, int students) {
-
-        int high = accumulate(pages.begin(), pages.end(),0);
-        int low = *max_element(pages.begin(), pages.end());
-        int res = -1;
+    
+    int splitArray(vector<int>& nums, int m) {
+        smallest_num = *min_element(nums.begin(), nums.end());
+        int high = accumulate(nums.begin(), nums.end(),0), low = nums[0];
+        int ans = 0;
         while( low <= high ){
             int mid = low + (high-low)/2;
-            if( isPossible(pages,students,mid) ){
-                res = mid;
-                high = mid-1;
-            }
-            else {
-                low = mid+1;
-            }
-
+            if( can_form_m_grps(nums,m,mid) ) ans = mid, high = mid-1;
+            else low = mid+1;
         }
-        return res;
+        return ans;
     }
 };
