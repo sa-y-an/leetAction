@@ -1,43 +1,28 @@
 class Solution {
 public:
-vector<vector<int>> threeSum(vector<int>& nums) {
-    
-    if( nums.size() < 3 ) {
-        return {};
-    }
-    
-    vector < vector <int> > ret;
-    sort(nums.begin() , nums.end() );
-    // for( auto val : nums ) cout<<val<<" ";
-    // cout<<endl;
-    
-    for(int i = 0 ; i < nums.size()-2 ; i++ ) {
+    vector<vector<int>> threeSum(vector<int>& arr) {
+        sort( arr.begin(), arr.end() );
+        const int n = arr.size();
+        vector <vector<int>> ans;
+        int target =0;
+        for( int i = 0 ; i < n ; i++){
+            if ( i > 0 and arr[i] == arr[i-1]) continue;
+            int start = arr[i];
+            int rest = target - start ;
+            int l = i+1 , r = n-1;
+            while( l < r ){
+                int temp = arr[l] + arr[r];
+                if( temp > rest ) r--;
+                else if( temp < rest ) l++;
+                else {
+                    vector <int> part = {arr[i], arr[l], arr[r]};
+                    ans.push_back(part);
+                    int f = arr[l];
+                    while(l < r and arr[l] == f ) l++;
+                }
+            }
+        }
         
-        if(i>0 and nums[i] == nums[i-1] ) continue;
-        
-        int n = nums.size()-1;
-        int temp = -1*nums[i];
-        int j = i+1;
-        while(j < n) {
-            
-            int sum = nums[j] + nums[n];
-            
-            if ( sum > temp ) {
-                n--;
-            }
-            else if ( sum < temp){
-                j++;
-            }
-            else {
-                
-                ret.push_back({nums[i], nums[j], nums[n]});  
-                j++;
-                while( j<n and nums[j] == nums[j-1]) j++;
-            }
-         }
+        return ans;
     }
-    
-    return ret;
-}
-
 };
