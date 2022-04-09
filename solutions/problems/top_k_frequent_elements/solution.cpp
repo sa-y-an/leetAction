@@ -10,6 +10,7 @@ public:
         }
         
         vector <int> ans;
+        
         while(not pq.empty()){
             ans.push_back(pq.top().second);
             pq.pop();
