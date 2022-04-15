@@ -1,24 +1,28 @@
+const long INF = -1e10;
 class Solution {
-
-    public:
-    
-    Solution(){
-        ios_base::sync_with_stdio(false);
-        cin.tie(0);
-        cout.tie(0);        
-    }
-    
-    
+public:
     int thirdMax(vector<int>& nums) {
-        long long a, b, c;
-        a = b = c = LLONG_MIN;
-        for (auto num : nums) {
-            if (num <= c || num == b || num == a) continue;
-            c = num;
-            if (c > b) swap(b, c);
-            if (b > a) swap(a, b);
-        }
-        return c == LLONG_MIN ? a : c;
 
+		long x1 = INF, x2 = INF, x3 = INF;
+
+		for( int x : nums ){
+			if( x == x3 or x == x2 ) continue;
+			if( x > x3 ) {
+				x1 = x2;
+				x2 = x3;
+				x3 = x;
+			}
+			else if( x > x2 ){
+				x1 = x2;
+				x2 = x;
+			}
+			else if( x > x1 ){
+				x1 = x;
+			}
+			
+		}
+        
+        if( x1 == INF ) return x3;
+        return x1;
     }
 };
