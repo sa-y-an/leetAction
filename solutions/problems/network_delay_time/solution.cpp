@@ -1,63 +1,64 @@
-const int INF = 1e9;
+const int INF = 1e9+7;
+
+class Compare {
+public :
+    bool operator () (pair <int,int> &a, pair <int,int> &b){
+        return a.second > b.second;
+    }
+};
 
 class Solution {
-    vector < vector <pair<int,int>>> adjList;
     vector <int> distance;
     vector <bool> visited;
+    vector <vector <pair <int, int>>> adjList;
 public:
     
     void dijikstra(int source){
         
         distance[source] = 0;
-        set < pair <int, int>> st;
-        // set of wt and edge
+        priority_queue < pair <int,int>, vector<pair<int,int>>  , Compare > pq;
         
-        st.insert({0,source});
+        pq.push({source,0});
         
-        while( not st.empty()){
-            auto node = *st.begin();            
-            int currVer = node.second;
-            int currWt = node.first;
-            st.erase(node);
+        while( not pq.empty()){
             
-            if( visited[currVer]) continue;
-            visited[currVer] = true;
-                
-            for( auto child : adjList[currVer]){
-                // cout<<"hi ";
-                int childEdge = child.first;
-                int childWeight = child.second;
-                if( childWeight + distance[currVer] < distance[childEdge]){
-                    distance[childEdge] = childWeight + distance[currVer];
-                    st.insert({distance[childEdge], childEdge});
+            auto curr = pq.top();
+            int ver = curr.first, sourceDistance = curr.second;
+            
+            pq.pop();
+            
+            if( visited[ver]) continue;
+            visited[ver] = true;
+
+            for( auto &child : adjList[ver]){
+                int childver = child.first, childwt = child.second;
+                if( visited[childver]) continue;
+                if( distance[childver] > distance[ver] + childwt ){
+                    pq.push({childver, childwt+ sourceDistance});
+                    distance[childver] = childwt + sourceDistance;
                 }
-                
             }
-        }
             
+        }   
     }
+
     
     int networkDelayTime(vector<vector<int>>& times, int n, int k) {
         
-        // taking the input
         adjList.resize(n+1);
-
-        // adjList is a vector of ( vector of pairs)
-        // each vector of pairs is a adjacency of that index
-        for( int e = 0 ; e < times.size() ; e++){
-            int u = times[e][0] , v = times[e][1] , w = times[e][2];
-            adjList[u].push_back({v,w});
+        for( int i = 0 ; i < times.size() ; i++){
+            int source = times[i][0], dest = times[i][1], wt = times[i][2];
+            adjList[source].push_back({dest,wt});
         }
         
-        distance.resize(n+1, INF);
-        distance[0] = 0;
-        visited.resize(n+1, false);
+        distance.resize(n+1,INF);
+        visited.resize(n+1,false);
+        
         dijikstra(k);
-        
-        int ret = *max_element(distance.begin(), distance.end());
-        
-        if( ret == INF) return -1;
-        else return ret;
+        distance[0] = -1;
+        int _max = *max_element(distance.begin(), distance.end());
+        if( _max == INF ) return -1;
+        return _max;
         
     }
 };
