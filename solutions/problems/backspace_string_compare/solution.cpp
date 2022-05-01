@@ -1,16 +1,19 @@
 class Solution {
 public:
-    stack <char> simplify(string str){
-        stack <char> st;
-        for( auto ch: str){
-            if( ch == '#' and not st.empty()) st.pop();
-            else if (ch == '#') continue;
-            else st.push(ch);
-        }
-        return st;
+    
+    string evaluate(string &s){
+        string str;
+        for( auto ch : s ){
+            if( ch != '#') str.push_back(ch);
+            else {
+                if( str.size() > 0 ) str.pop_back();
+            }
+        }       
+        return str;
     }
     
+    
     bool backspaceCompare(string s, string t) {
-        return simplify(s) == simplify(t);
+        return evaluate(s) == evaluate(t);
     }
 };
