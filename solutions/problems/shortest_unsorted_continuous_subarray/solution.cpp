@@ -1,17 +1,30 @@
+const int INF = 1e6;
 class Solution {
 public:
-    int findUnsortedSubarray(vector<int>& nums) {
-        vector <int> arr = nums;
-        sort(nums.begin(), nums.end());
-        int l = 0 , r = nums.size()-1;
-        
-        while( l < r and nums[l] == arr[l] ) l++;
-        while( l < r and nums[r] == arr[r] ) r--;
-        
-        if( r-l == 0 ) return 0;
-        return r-l+1;
+    int findUnsortedSubarray(vector<int>& nums) { 
+        int small = INF, n = nums.size(), _max = 0;
+        stack <int> st,s;
+        for( int i = 0 ; i < n ; i++) {
+            if( st.empty() or nums[st.top()] <= nums[i])st.push(i);
+            else {
+                while( !st.empty() and nums[st.top()] > nums[i] ) st.pop();
+                int x = 0;
+                if( !st.empty() ) x = st.top()+1;
+                small = min(small, x);
+                st.push(i);
+            }
+        }
+        if( small == INF ) return 0;
+        for( int i = n-1 ; i >= 0 ; i--){
+            if( s.empty() or nums[s.top()] >= nums[i]) s.push(i);
+            else {
+                while( !s.empty() and nums[s.top()] < nums[i] ) s.pop();
+                int x = n-1;
+                if( !s.empty()) x = s.top()-1;
+                _max = max(_max,x);
+                s.push(i);
+            }
+        }
+        return _max-small+1;
     }
-    // 0 1 2 3 04 05 06
-    // 2 6 4 8 10 09 15 
-    // 2 4 6 8 09 10 15
 };
