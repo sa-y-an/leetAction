@@ -1,22 +1,17 @@
 class Solution {
 public:
     int maxOperations(vector<int>& nums, int k) {
+        unordered_map <int, int> umap;
+        for( int x : nums ) umap[x]++;
         
-        unordered_map<int,int> um;
-        for(auto it:nums){
-            if(it>=k){
-                continue;
-            }
-            um[it]++;
+        int cnt =0;
+        for( int num : nums ){
+            int comp = k-num;
+            if( umap[num] <= 0 || umap[comp] <= 0 ) continue;
+            if( comp == num ){
+                if( umap[comp] >= 2 ) umap[num] -= 2 , cnt++;
+            }else umap[num]--, umap[comp]--, cnt++;   
         }
-        int ans=0;
-        for(auto it:um){
-            if(um.count(k-it.first)){
-                ans+=min(um[k-it.first],it.second);
-            }
-        }
-        ans/=2;
-        return ans;
-        
+        return cnt;
     }
 };
