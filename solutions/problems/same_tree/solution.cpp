@@ -10,11 +10,19 @@
  * };
  */
 class Solution {
-public:    
-    bool isSameTree(TreeNode* p, TreeNode* q) {
-        if( not p or not q) return p==q;
-        return isSameTree(p->left,q->left) and (p->val == q->val) 
-            and isSameTree(p->right, q->right);
-
+public:
+    
+    bool checker(TreeNode* p, TreeNode* q){
+        if( !p or !q ) return p == q;
+        if( p->val != q->val) return false;
+        return checker(p->left,q->left) and checker(p->right,q->right);
     }
+    
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+        // if( not root ) return true;''
+        if(!p || !q) return p == q;
+        return checker(p, q);
+        
+    }
+    
 };
