@@ -1,35 +1,15 @@
 class Solution {
 public:
-    
-    Solution(){
-        ios_base::sync_with_stdio(false);
-        cin.tie(0);
-        cout.tie(0);        
-    }
-
-    int longestCommonSubsequence(string str1, string str2) {
-        
-        vector < vector <int> > lcs( str2.size()+1 , vector <int> (str1.size()+1 , 0) );
-        
-        
-        const int xlim = str1.size()+1;
-        const int ylim = str2.size()+1;
-        
-        for( int y = ylim-2 ; y >= 0 ; y-- ) {
-            for( int x = xlim-2; x >=0 ; x-- ){
-
-                if( str1[x] == str2[y] ) {
-                    lcs[y][x] = 1 + lcs[y+1][x+1];
-                }
-                
-                else {
-                    lcs[y][x] = max(lcs[y+1][x], lcs[y][x+1]);
-                }
-                
+    int longestCommonSubsequence(string &text1, string &text2) { 
+        int n = text1.size(), m = text2.size();
+        int dp[n+1][m+1];
+        memset(dp,0,sizeof(dp));
+        for( int i = 1 ; i <= n ; i++){
+            for( int j = 1 ; j <= m ; j++){
+                if( text1[i-1] == text2[j-1]) dp[i][j] = 1 + dp[i-1][j-1];
+                else dp[i][j] = max(dp[i-1][j], dp[i][j-1]);
             }
         }
-        
-        return lcs[0][0];
-        
+        return dp[n][m]; 
     }
 };
