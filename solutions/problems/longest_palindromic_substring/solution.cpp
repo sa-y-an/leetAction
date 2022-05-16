@@ -2,64 +2,32 @@ class Solution {
 public:
     string longestPalindrome(string s) {
         
-    // ios_base::sync_with_stdio(false);
-    // cin.tie(0);
-    // cout.tie(0);
-
+        string z = s;
+        reverse(z.begin(),z.end());
+        int n = s.size();
+        int dp[n+1][n+1];
+        memset(dp,0,sizeof(dp));
+        pair <int, int> idx;
+        int cnt = 0;
+        for( int i = 1 ; i <= n ; i++){
+            for( int j = 1; j <= n ; j++){
+                if( s[i-1]== z[j-1] ) {
+                    dp[i][j] = 1 + dp[i-1][j-1];
+                    if( cnt < dp[i][j] and i-dp[i][j]== n-j){ // i - dp[i][j] == n- j 
+                        cnt = dp[i][j];
+                        idx = {i,j};
+                    }
+                }
+            }
+        }
         
-	if( s.size()<2 ){
-		return s;
-	}
-
-	int i=0;
-	int l,r;
-	string substr="";
-	int max_len=0;
-
-
-
-	for( i =0 ; i < s.size() ; i++){
-
-		int t_len=0;
-		
-
-		//  check for odd palindromes
-		l = i , r = i;
-		
-		while( l>=0 && r<s.size() && s[l] == s[r] ){
-
-			t_len = r-l+1;
-
-			if( t_len > max_len ){
-				max_len = t_len;
-				substr = s.substr(l,t_len);
-			}
-
-			l--, r++;
-		}
-
-		// check for even palindromes
-
-		l = i , r = i+1;
-		
-		while( l>=0 && r<s.size() && s[l] == s[r] ){
-
-			t_len = r-l+1;
-
-			if( t_len > max_len ){
-				max_len = t_len;
-				substr = s.substr(l,t_len);
-			}
-
-			l--, r++;
-		}
-
-
-
-
-	}
-
-	return substr;
+        auto [i,j] = idx;
+        string ans;
+        while( i > 0 and j > 0 and dp[i][j] > 0 ){
+            ans.push_back(s[i-1]);
+            i--,j--;
+        }
         
+        return ans;
     }
 };
