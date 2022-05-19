@@ -1,57 +1,32 @@
-int X,Y;
+vector <pair <int,int>> dz = {{1,0},{0,1},{-1,0},{0,-1}};
 class Solution {
+    vector <vector <int>> dp;
 public:
-    Solution(){
-        ios_base::sync_with_stdio(false);
-        cin.tie(0);
-        cout.tie(0);        
-    }
     
-    vector <vector<int>> longestPath;
-    struct children{
-        int x;
-        int y;
-        children(int x,int y){
-            this->x = x , this-> y = y;
+    int dfs(vector<vector<int>>& matrix, int y, int x){
+        int n = matrix.size() , m = matrix[0].size();
+        if( dp[y][x] != -1 ) return dp[y][x];
+        int ans = 1;
+        for( auto &[dy,dx] : dz ){
+            int j = x + dx, i = y+dy;
+            if( i < 0 or j < 0 or i >= n or j >= m or matrix[i][j] <= matrix[y][x]) continue;
+            int pathSum = 1 + dfs(matrix,i,j);
+            ans = max(ans, pathSum);
         }
-        bool validMove(vector < vector <int> > & matrix, int &px , int &py){
-            if( x >= X or y >= Y or x < 0 or y < 0 ) return false;
-            if( matrix[py][px] >= matrix[y][x] ) return false;
-            return true;
-        }
-    };
-    
-    int dfs(vector<vector<int>>& matrix,int x,int y){
-        
-        if( longestPath[y][x] != -1 ) return longestPath[y][x];        
-        vector < pair <int,int> > mover = {{1,0},{0,1},{-1,0},{0,-1}};
-        
-        int lp = 0;
-        
-        for( auto move : mover ){
-            children child(x+move.first, y+move.second);
-            if( not child.validMove(matrix, x,y) ) continue;
-            if( longestPath[child.y][child.x] != -1 ) 
-                lp = max(lp, 1+ longestPath[child.y][child.x]);
-            else lp = max(lp,1+dfs(matrix,child.x,child.y));
-        }
-        
-        return longestPath[y][x] = lp;
-            
+        return dp[y][x] = ans;
     }
     
     int longestIncreasingPath(vector<vector<int>>& matrix) {
-        Y = matrix.size(), X = matrix[0].size();
-        longestPath.resize(Y,vector<int> (X,-1));
+        int n = matrix.size() , m = matrix[0].size();
+        dp.resize(n, vector<int> (m, -1));
         
-        int lp = 0;
-        for( int y = 0 ; y < Y ; y++){
-            for( int x = 0 ; x < X ; x++){
-                if( longestPath[y][x] != -1 ) lp = max( lp, longestPath[y][x]);
-                else lp = max(lp, dfs(matrix,x,y));
+        int ans = 0;
+        for( int i = 0 ; i < n ; i++){
+            for( int j = 0 ; j < m ;  j++){
+                if( dp[i][j] == -1 ) ans = max(ans,dfs(matrix,i,j));
             }
         }
         
-        return lp+1;
+        return ans;
     }
 };
