@@ -1,22 +1,12 @@
+const int INF = 1e5+10;
 class Solution {
 public:
     int maxProfit(vector<int>& prices) {
-        
-        ios_base::sync_with_stdio(false);
-        cin.tie(0);
-        cout.tie(0);
-
-        int maxProfit = 0;
-        int minPrice = prices[0];
-        
-        for( int price : prices ) {
-            
-            maxProfit = max( maxProfit, price - minPrice);
-            minPrice = min( minPrice, price );
-        
+        int n = prices.size(), minSoFar = INF, ans = 0;
+        for( int i = 0 ; i < n ; i++){
+            ans = max(ans, prices[i]-minSoFar);
+            minSoFar = min(minSoFar, prices[i]);
         }
-        
-        return maxProfit;
-        
+        return ans;
     }
 };
