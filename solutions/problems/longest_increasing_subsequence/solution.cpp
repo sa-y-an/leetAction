@@ -1,24 +1,21 @@
 class Solution {
+    vector <int> dp;
 public:
-    Solution(){
-        ios_base::sync_with_stdio(false);
-        cin.tie(0);
-        cout.tie(0);        
+    
+    int lcs(vector<int>& nums, int idx, int prev){
+        
+        if( idx < 0 ) return 0;
+        int n = nums.size();
+        if( dp[prev-1] != -1 ) return dp[prev-1];
+        if( prev == n or nums[idx] < nums[prev] ){
+            return dp[prev-1] = max( 1 + lcs(nums,idx-1,idx), lcs(nums,idx-1,prev));    
+        }
+        else return dp[prev-1] = lcs(nums, idx-1, prev);
     }
- 
     
     int lengthOfLIS(vector<int>& nums) {
-            
-        vector <int> lis(nums.size()+1,1 );
-        
-        for( int i = lis.size()-3 ; i >=0 ; i-- ){
-            for( int j = i+1 ; j < nums.size() ; j++ ){
-                if( nums[j] > nums[i] ){
-                    lis[i] = max(lis[i], 1 + lis[j]);
-                }
-            }            
-        }
-        
-        return *max_element(lis.begin(), lis.end());
+        int n = nums.size();
+        dp.resize(n,-1);
+        return lcs(nums, n-1 , n);
     }
 };
