@@ -1,28 +1,15 @@
-/*
-The states in the recursion are -
-1. chosen 
-2. index 
-*/
-
 class Solution {
-    vector <vector<int>> ans;
-    vector <int> chosen;
 public:
-    
-    
-    void generate(vector <int> & nums, int idx=0 ){
-        if( idx > nums.size()-1 ){
-            ans.push_back(chosen);
-            return;
-        } 
-        chosen.push_back(nums[idx]);
-        generate(nums, idx+1);
-        chosen.pop_back();
-        generate(nums, idx+1);
-    }
-    
     vector<vector<int>> subsets(vector<int>& nums) {
-        generate(nums);
+        vector <vector<int>> ans = {{}};
+        for( int x : nums ){
+            int sz = ans.size();
+            for( int i = 0 ; i < sz ; i++ ){
+                vector <int> temp = ans[i];
+                temp.push_back(x);
+                ans.push_back(temp);
+            }
+        }
         return ans;
     }
 };
