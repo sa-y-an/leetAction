@@ -1,30 +1,22 @@
+const int INF = 1e6;
 class Solution {
 public:
-    Solution(){
-        ios_base::sync_with_stdio(false);
-        cin.tie(0);
-        cout.tie(0);        
-    }
-
     
-    int coinChange(vector<int>& nums, int amount) {
-    
-    const int inf = INT_MAX-1;
-	int minWays[nums.size()+1][amount+1];
-	memset(minWays, 0 , sizeof(minWays));
-    
-	for( int total = 1; total <= amount ; total++ ) minWays[0][total] = inf;
-        	
-
-	for( int idx = 1 ; idx <= nums.size() ; idx++ ){
-		for( int total = 1 ; total <= amount ; total++  ){
-            if( total >= nums[idx-1])
-			    minWays[idx][total] =  min( minWays[idx-1][total],1 + minWays[idx][total - nums[idx-1]] );     
-			else 
-                minWays[idx][total] = minWays[idx-1][total];
-		}
-	}
-	
-	return minWays[nums.size()][amount] > INT_MAX-2 ? -1 : minWays[nums.size()][amount];
+    int coinChange(vector<int>& coins, int amount) {
+        int n = coins.size();
+        int dp[n+1][amount+1];
+        memset(dp, 0, sizeof(dp));
+        for( int j = 1 ; j < amount+1 ; j++) dp[0][j] = INF;
+        for( int i = 1 ; i < n+1 ; i++){
+            for( int j = 1 ; j < amount+1 ; j++){
+                if( j-coins[i-1] >= 0)
+                    dp[i][j] = min(1+dp[i][j-coins[i-1]], dp[i-1][j]);
+                else 
+                    dp[i][j] = dp[i-1][j];
+            }
+        }
+        int ans = dp[n][amount];
+        if( ans >= INF ) return -1;
+        return ans;
     }
 };
