@@ -1,24 +1,28 @@
+const int INF = 1e9;
 class Solution {
+    vector <int> dp;
 public:
-    Solution(){
-        ios_base::sync_with_stdio(false);
-        cin.tie(0);
-        cout.tie(0);        
-    }
-
     
-    int jump(vector<int>& nums) {
+    
+    int minJump(vector <int> &nums, int idx){
         
-        vector <int> minSteps(nums.size(), INT_MAX);
-        minSteps[minSteps.size()-1] = 0;
+        int n = nums.size();
+        if( idx >= n ) return INF;
+        if( dp[idx] != -1 ) return dp[idx];
+        if( idx == n-1 ) return dp[idx] = 0;
         
-        for(int i = nums.size()-2 ; i >= 0 ; i-- ){
-            for(int j = i+1 ; j <= nums[i]+i and j < nums.size() ; j++ ){
-                if(  minSteps[j] != INT_MAX ) 
-                    minSteps[i] = min(minSteps[i], 1 + minSteps[j] );
-            }
+        int maxJump = nums[idx];
+        int ans = INF;
+        for( int i = 1; i <= maxJump ; i++){
+            ans = min(1+minJump(nums, idx+i) , ans);
         }
         
-        return minSteps[0];
+        return dp[idx] = ans;
+        
+    }
+    
+    int jump(vector<int>& nums) {
+        dp.resize(nums.size(), -1);
+        return minJump(nums, 0);
     }
 };
