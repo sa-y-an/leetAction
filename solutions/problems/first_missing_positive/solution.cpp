@@ -1,25 +1,19 @@
 class Solution {
 public:
     int firstMissingPositive(vector<int>& nums) {
-        
-        unordered_set <int> uset;
-        
-        for( auto val : nums ) {
-            uset.insert(val);
+        int n = nums.size();
+        int arr[n+2];
+        memset(arr, 0,sizeof(arr));
+        for( int i = 0 ; i < n ; i++){
+            if(nums[i] < 1 || nums[i] > n+1 ) nums[i] = 0;
+            else arr[nums[i]]++;
         }
         
-        int max_elt =  *max_element(nums.begin() , nums.end());
-        
-        if( max_elt < 1 ) return 1;
-        
-        int i = 1;
-        while( i <= max_elt ) {
-            
-            if (uset.find(i) == uset.end() ) return i;
-            i++;
-            
+        for( int i = 1 ; i < n+2 ; i++){
+            if( arr[i] == 0 ) 
+                return i;
         }
         
-        return max_elt+1;
+        return n+1;
     }
 };
