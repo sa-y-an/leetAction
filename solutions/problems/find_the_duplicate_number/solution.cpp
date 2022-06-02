@@ -1,11 +1,20 @@
 class Solution {
-    unordered_set <int> uset;
 public:
     int findDuplicate(vector<int>& nums) {
-        for( auto num :nums ){
-            if( uset.count(num) > 0 ) return num;
-            uset.insert(num);
+        int slow = 0 , fast = 0;
+        while(true){
+            slow = nums[slow];
+            fast = nums[nums[fast]];
+            if( slow == fast )
+                break;
         }
-        return -1;
+        
+        int merge = fast , head = 0;
+        while( head != merge ){
+            head = nums[head];
+            merge = nums[merge];
+        }
+        
+        return head;
     }
 };
