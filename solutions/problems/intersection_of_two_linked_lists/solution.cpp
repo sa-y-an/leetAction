@@ -8,18 +8,19 @@
  */
 class Solution {
 public:
-    Solution(){
-        ios_base::sync_with_stdio(false);
-        cin.tie(0);
-        cout.tie(0);        
-    }
-
     ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
-        ListNode* a = headA, *b = headB;
-        while( a != b ){
-            a = a ? a->next : headB;
-            b = b ? b->next : headA;         
-        } 
-        return a;
+        
+        ListNode* l = headA, *r = headB;
+        
+        while( l != r ){
+            
+            if( l ) l = l->next;
+            else l = headB;
+            
+            if( r ) r = r->next;
+            else r = headA;
+        }
+        
+        return l;
     }
 };
