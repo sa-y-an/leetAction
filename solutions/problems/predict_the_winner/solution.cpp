@@ -26,6 +26,9 @@ public:
     
     bool PredictTheWinner(vector<int>& nums) {
         int n = nums.size();
+        if( n%2 == 0 )
+            return true;
+        
         
         dp.resize(n, vector<vector<int>> (n, vector <int> (2,-1)));
         
