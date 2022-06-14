@@ -1,16 +1,24 @@
 class Solution {
 public:
-    int minDistance(string text1, string text2) {
-        int n = text1.size(), m = text2.size();
-        int dp[n+1][m+1];
-        memset(dp,0,sizeof(dp));
+    int minDistance(string word1, string word2) {
+        
+        int n = word1.size(), m = word2.size();
+        
+        vector <int> prev(m+1, 0);
+        vector <int> curr(m+1,0);
+        
         for( int i = 1 ; i <= n ; i++){
-            for( int j = 1 ; j <= m ; j++){
-                if( text1[i-1] == text2[j-1]) dp[i][j] = 1 + dp[i-1][j-1];
-                else dp[i][j] = max(dp[i-1][j], dp[i][j-1]);
+            for( int j  = 1 ; j <=m ; j++){
+                if( word1[i-1] == word2[j-1] )
+                    curr[j] = 1 + prev[j-1];
+                else 
+                    curr[j] = max(prev[j], curr[j-1]);
             }
+            prev = curr;
         }
-        int lcs = dp[n][m];
-        return n+m - 2*lcs;
+        
+        int lcs = curr[m];
+        int totalLength = n+m;
+        return totalLength - 2*(lcs);
     }
 };
