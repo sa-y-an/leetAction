@@ -1,32 +1,13 @@
 class Solution {
 public:
-    Solution(){
-        ios_base::sync_with_stdio(false);
-        cin.tie(0);
-        cout.tie(0);        
-    }
-
-    
-    
     int numSubarrayProductLessThanK(vector<int>& nums, int k) {
-        
-        if(k < 1 ) return 0;
-        
-        int left = 0, right = 0, product = 1, count = 0  ;
-        
-        while( right < nums.size() ){
-            
-            product *= nums[right];
-        
-            while( left <= right and product >= k) {
-                product /= nums[left];
-                left++;
-            }
-            
-            count += right - left + 1;
-            right++ ;
+        if (k <= 1) return 0;
+        int prod = 1, ans = 0, left = 0;
+        for (int right = 0; right < nums.size(); right++) {
+            prod *= nums[right];
+            while (prod >= k) prod /= nums[left++];
+            ans += right - left + 1;
         }
-       
-        return count;
+        return ans;
     }
 };
