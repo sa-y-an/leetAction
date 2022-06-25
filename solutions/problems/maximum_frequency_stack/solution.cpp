@@ -1,22 +1,32 @@
 class FreqStack {
-    unordered_map<int, int> freq;
-    unordered_map<int, stack<int>> m;
-    int maxfreq;
+    unordered_map <int, int> umap;
+    unordered_map <int, vector <int>> freqStack;
+    int maxFreq;
 public:
     FreqStack() {
-        maxfreq=0;
+        maxFreq = 0;
     }
     
-    void push(int x) {
-        maxfreq = max(maxfreq, ++freq[x]);
-        m[freq[x]].push(x);
+    void push(int val) {
+        umap[val]++;
+        int freq = umap[val];
+        freqStack[freq].push_back(val);
+        maxFreq = max(maxFreq,freq);
     }
     
     int pop() {
-        int x = m[maxfreq].top();
-        m[maxfreq].pop();
-        if (!m[freq[x]--].size()) maxfreq--;
-        return x;
+        
+        while( freqStack.count(maxFreq) == 0  )
+            maxFreq--;
+        int top = freqStack[maxFreq].back();
+        umap[top]--;
+        freqStack[maxFreq].pop_back();
+        if( freqStack[maxFreq].size() == 0 ){
+            freqStack.erase(maxFreq);
+            maxFreq--;
+        }
+        
+        return top;
     }
 };
 
