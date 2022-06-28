@@ -1,7 +1,6 @@
 class Solution {
 public:
     int minDeletions(string s) {
-        
         vector <int> freq(26,0);
         for( char ch : s )
             freq[ch-'a']++;
