@@ -1,41 +1,49 @@
-vector <pair<int, int>> dz = {{1,0}, {0,1},{-1,0},{0,-1}};
+vector <pair <int,int>> mover = {{1,0},{0,1}, {-1,0},{0,-1}};
 class Solution {
 public:
     
-    void dfs(vector<vector<int>>& grid, int y, int x){
+    int dfs( vector <vector <int>> &grid, int y, int x){
         
         int n = grid.size(), m = grid[0].size();
-        if( y >= n or x >= m or y < 0 or x < 0 or grid[y][x] != 1 ) return;
         grid[y][x] = 2;
         
-        for( auto &[dy,dx] : dz){
-            int i = y+dy, j = x+dx;
-            dfs(grid, i, j);
+        int ans = 1;
+        for( auto &[dy,dx] : mover ){
+            int i = y + dy, j = x +dx;
+            if( i >= 0 and i < n and j >= 0 and j < m and grid[i][j] == 1)
+                ans += dfs(grid, i,j);
         }
         
+        return ans;
     }
+    
     
     int numEnclaves(vector<vector<int>>& grid) {
         
         int n = grid.size(), m = grid[0].size();
-        for( int x = 0 ; x < m ; x++) {
-            if( grid[0][x] == 1 ) dfs(grid,0,x);
-            if( grid[n-1][x] == 1 ) dfs(grid,n-1,x);
+        for( int y = 0 ; y < n ; y++ ){
+            if( grid[y][0] == 1 )
+                dfs(grid,y,0);
+            if( grid[y][m-1] == 1)
+                dfs(grid,y,m-1);
         }
         
-        for( int y = 0 ; y < n ; y++){
-            if( grid[y][0] == 1 ) dfs(grid, y,0);
-            if( grid[y][m-1] == 1) dfs(grid,y,m-1);
+        for( int x = 1 ; x < m-1 ; x++){
+            if( grid[0][x] == 1 )
+                dfs(grid,0,x);
+            if( grid[n-1][x] == 1)
+                dfs(grid,n-1,x);
         }
         
         int ans = 0;
-        for( int i = 1; i < n-1 ; i++){
-            for( int j = 1; j < m-1 ; j++){
-                if( grid[i][j] == 1) ans++;
+        for( int i = 1 ; i < n-1 ; i++){
+            for(int j = 1 ; j < m-1 ; j++){
+                if( grid[i][j] == 1 ){
+                    ans += dfs(grid,i,j);
+                }
             }
         }
         
         return ans;
-        
     }
 };
