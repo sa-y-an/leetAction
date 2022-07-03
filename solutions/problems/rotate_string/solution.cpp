@@ -1,7 +1,6 @@
 class Solution {
 public:
-
     bool rotateString(string s, string goal) {
-        return (s.size() == goal.size() and (s+s).find(goal) != string::npos ); 
+        return (goal+goal).find(s) != string :: npos and s.size() == goal.size();
     }
 };
