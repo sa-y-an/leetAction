@@ -2,34 +2,39 @@ class Solution {
     vector <vector <int>> dp;
 public:
     
-    bool match(string &s1, string &s2, string &s3, int l , int r, int idx ){
+    bool isPossible( string &s1, string &s2, string &s, int i1, int i2, int j ){
         
-        if( idx < 0 )
-            return l < 0 and r < 0;
-        if( (l < 0 and r < 0) or l < -1 or r < -1 )
+        if( j == 0 )
+            return true;
+        if( i1 == 0 and i2 == 0 )
             return false;
         
-        if( dp[l+1][r+1] != -1 )
-            return dp[l+1][r+1];
+        if( dp[i1][i2] != -1 )
+            return dp[i1][i2];
         
         bool ans = false;
+        if( i1 > 0 and s1[i1-1] == s[j-1] ){
+            ans |= ( isPossible(s1,s2,s,i1-1,i2,j-1) || isPossible(s1,s2,s,i1-1,i2,j) );
+        }
         
-        if( l >= 0 and s3[idx] == s1[l])
-            ans |= match(s1,s2,s3,l-1,r,idx-1);
+        if( i2 > 0 and s2[i2-1] == s[j-1] ){
+            ans |= ( isPossible(s1,s2,s,i1,i2-1,j-1) || isPossible(s1,s2,s,i1,i2-1,j) );
+        }
         
-        if( r >= 0 and s3[idx] == s2[r])
-            ans |= match(s1,s2,s3,l,r-1,idx-1);
-        
-        return dp[l+1][r+1] = ans;
-        
+        return dp[i1][i2] = ans;   
     }
     
+    
     bool isInterleave(string s1, string s2, string s3) {
-        int n1 = s1.size(), 
-            n2 = s2.size(),
-            n3 = s3.size();
         
-        dp.resize(n1+1, vector <int> (n2+1, -1));
-        return match(s1,s2,s3,n1-1,n2-1,n3-1);
+        int m = s3.size();
+        int n1 = s1.size();
+        int n2 = s2.size();
+        
+        if( m != n1+n2 )
+            return false;
+        
+        dp.resize(n1+1, vector <int> (n2+1,-1));
+        return isPossible(s1,s2,s3,n1,n2,m);
     }
 };
