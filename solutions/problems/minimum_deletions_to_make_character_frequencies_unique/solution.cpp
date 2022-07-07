@@ -1,31 +1,33 @@
 class Solution {
 public:
     int minDeletions(string s) {
-        vector <int> freq(26,0);
-        for( char ch : s )
-            freq[ch-'a']++;
+        
+        unordered_map <char,int> mpp;
+        for( auto ch : s )
+            mpp[ch]++;
+        vector <int> freq;
+        for( auto &[p,q] : mpp)
+            freq.push_back(q);
         
         sort(freq.begin(),freq.end(), greater <int> ());
-        int prev = s.size()+1;
         
+        int prev = s.size()+1;
         int ans = 0;
-        for( int x : freq){
-            
-            if( x == 0 ) break;
-            
-            if( prev > x ) prev = x;
-            else {
-                int diff = x - prev;
-                if( prev > 0 ){
-                    prev--;
-                    ans += diff+1;
-                }else {
-                    prev = 0;
-                    ans += diff;
-                }
+        for( int curr : freq){
+            if( prev == 0 ){
+                ans += curr;
+                continue;
             }
+            else if( curr >= prev){
+                int shouldBe = prev-1;
+                int diff = curr-shouldBe;
+                ans += diff;
+                curr -= diff;
+            }
+            prev = curr;
         }
         
         return ans;
+        
     }
 };
