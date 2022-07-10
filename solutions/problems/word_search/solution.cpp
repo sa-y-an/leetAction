@@ -1,56 +1,42 @@
-vector <pair <int, int>> movements = {{1,0},{0,1},{-1,0},{0,-1}};
+vector <pair<int,int>> dz = {{1,0},{0,1},{-1,0},{0,-1}};
 
 class Solution {
+    vector <vector <bool>> visited;
 public:
-    Solution(){
-        ios_base::sync_with_stdio(false);
-        cin.tie(0);
-        cout.tie(0);        
-    }
-
     
-    bool taken[7][7];
-    int X, Y;
-    string target;
-    
-    bool isValid ( int x , int y, vector <vector <char>> &grid, string &chosen ){
-        if( x >= X or y >= Y or x < 0 or y < 0 ) return false;
-        if( taken[y][x] ) return false;
-        if( target[chosen.size()] != grid[y][x] ) return false;
-        return true;
-    }
-    
-    bool dfs(int x, int y, vector <vector <char>> &grid, string chosen=""){
+    bool isPresent(vector<vector<char>> &board, string &word,int idx, int y, int x){
         
-        chosen.push_back(grid[y][x]);
-        taken[y][x] = true;
+        int n = board.size(), m = board[0].size();
         
-        if( chosen.size() == target.size() ) return true;
+        if( idx == word.size())
+            return true;
         
-        for( auto move : movements ){
-            if( not isValid(x+move.first, y+move.second, grid, chosen) ) continue;
-            if (dfs(x+move.first, y+move.second,grid, chosen)) return true;
+        if( y < 0 || y >= n || x < 0 || x >= m || visited[y][x] )
+            return false;
+        bool ans = false;
+        visited[y][x] = true;
+        
+        if( board[y][x] == word[idx] ){
+            for( auto &[dy,dx] : dz ){
+                int i = y + dy , j = x + dx;
+                ans |= isPresent(board,word,idx+1,i,j);
+            }    
         }
         
-        taken[y][x] = false;
-        return false;   
+        visited[y][x] = false;
+        return ans;
     }
     
     bool exist(vector<vector<char>>& board, string word) {
-        
-        X = board[0].size() , Y = board.size();
-        target = word;
-        
-        for( int y = 0 ; y < Y ; y++){
-            for( int x = 0 ; x < X ; x++){
-                if( board[y][x] == word[0]) {
-                    memset(taken, false, sizeof(taken));
-                    if( dfs(x,y,board) ) return true;
-                }       
+        int n = board.size() , m = board[0].size();
+        visited.resize(n , vector <bool> (m,false));
+        for( int i = 0 ; i < n ; i++){
+            for( int j = 0 ; j < m ; j++){
+                if( board[i][j] == word[0] and isPresent(board,word,0,i,j))
+                    return true;
             }
         }
         
         return false;
-        
     }
 };
