@@ -10,26 +10,20 @@
  */
 class Solution {
 public:
+    
+    ListNode* reverse(ListNode* head, int k){
+        
+        if( !head || !head->next || !k )
+            return head;
+        
+        ListNode* newHead = reverse(head->next,k-1);
+        ListNode* oldNext = head->next->next;
+        head->next->next = head;
+        head->next = reverse(oldNext,1);
+        return newHead;
+    }
+    
     ListNode* swapPairs(ListNode* head) {
-
-        ios_base::sync_with_stdio(false);
-        cin.tie(0);
-        cout.tie(0);
-        
-        if(head and head->next) {
-            
-            auto second = head->next;
-            auto third = second->next;
-            
-            second->next = head;
-            head->next = swapPairs(third);
-            
-            return second;
-        }
-        
-        if(head) return head;
-        
-        return nullptr;
-        
+        return reverse(head,1);
     }
 };
