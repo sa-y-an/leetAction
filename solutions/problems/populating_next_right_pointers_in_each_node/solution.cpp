@@ -18,38 +18,28 @@ public:
 
 class Solution {
 public:
-    unordered_map <Node*, int > level;
-    
     Node* connect(Node* root) {
         
-        if( not root) return nullptr;
-        
-        level[root] = 0;
+        if( !root )
+            return nullptr;
         queue <Node*> q;
-        
         q.push(root);
-        while( not q.empty()) {
-            
-            auto currNode = q.front();
-            q.pop();
-            
-            if( q.empty() or level[q.front()] != level[currNode]) currNode->next = nullptr;
-            else currNode->next = q.front(); 
-                
-
-            if( currNode->left ){
-                level[currNode->left] = level[currNode]+1;
-                q.push(currNode->left);
+        
+        while( !q.empty()){
+            int sz = q.size();
+            Node* prev = nullptr;
+            for( ; sz-- ; q.pop()){
+                Node* curr = q.front();
+                if( curr->left )
+                    q.push(curr->left);
+                if( curr->right )
+                    q.push(curr->right);
+                if( prev )
+                    prev->next = curr;
+                prev = curr;
             }
-            if( currNode->right){
-                level[currNode->right] = level[currNode]+1;
-                q.push(currNode->right);
-            }
-            
         }
         
         return root;
-        
-        
     }
 };
