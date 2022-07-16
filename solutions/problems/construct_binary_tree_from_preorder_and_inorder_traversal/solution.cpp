@@ -10,32 +10,26 @@
  * };
  */
 class Solution {
+    int preorderIdx = 0;
     unordered_map <int,int> imap;
-    int preorderIdx;
 public:
     
-    TreeNode* build(vector <int> &preorder, int l, int r){
+    TreeNode* build( vector <int> &preorder, int il, int ir){
         
-        if( l > r )
+        if( il > ir )
             return nullptr;
         
-        int rootVal = preorder[preorderIdx++];
-        TreeNode* root = new TreeNode(rootVal);
- 
-        root->left = build(preorder,l,imap[rootVal]-1);
-        root->right = build(preorder,imap[rootVal]+1, r);
-        
+        TreeNode* root = new TreeNode(preorder[preorderIdx++]);
+        root->left = build(preorder,il,imap[root->val]-1);
+        root->right = build(preorder,imap[root->val]+1,ir);
         return root;
     }
-    
     
     TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
         
         int n = inorder.size();
-        for( int j = 0 ; j < n ; j++){
-            imap[inorder[j]] = j;
-        }
-        preorderIdx = 0;
+        for( int i = 0 ; i < n ; i++)
+            imap[inorder[i]] = i;
         return build(preorder,0,n-1);
     }
 };
