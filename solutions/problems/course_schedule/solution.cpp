@@ -5,7 +5,7 @@ public:
     
     bool dfs(unordered_set <int> &ancestors, int ver){
         
-        if( visited[ver]) return false;
+        if( visited[ver] ) return false;
         if( ancestors.count(ver) > 0 ) return true;
         ancestors.insert(ver);
         
