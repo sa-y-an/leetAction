@@ -10,45 +10,42 @@
 class Solution {
 public:
     
-    unordered_map <TreeNode*, TreeNode* > parent;
-    
-    void dfs(TreeNode* vertex, TreeNode* par=nullptr){
+    bool getPath(TreeNode* root, TreeNode* target, vector <TreeNode*> &path){
         
-        if( not vertex) return;
+        if( !root )
+            return false;
         
-        parent[vertex] = par;
-        dfs(vertex->left, vertex);
-        dfs(vertex->right, vertex);   
-    }
-    
-    vector <TreeNode*> makePath(TreeNode* root){
-        vector <TreeNode*> ret;
-        ret.push_back(root);
-        while(parent[root]){
-            ret.push_back(parent[root]);
-            root = parent[root];
+        bool ans = false;
+        if( root == target ){
+            ans = true;
+            path.push_back(root);
+            return ans;
         }
         
-        reverse(ret.begin(), ret.end());
-        return ret;
+        ans |= getPath(root->left, target, path);
+        ans |= getPath(root->right, target, path);
+        
+        if( ans )
+            path.push_back(root);
+        
+        return ans;
     }
     
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        dfs(root);
         
-		vector <TreeNode*> path1 = makePath(p);
-		vector <TreeNode*> path2 = makePath(q);
-
-		TreeNode* lca = nullptr;
+        vector <TreeNode*> path1, path2;
+        getPath(root, p, path1);
+        getPath(root, q, path2);
         
-		for( int i = 0 ; i < min(path1.size(), path2.size()) ; i++){
-			if( path1[i] == path2[i]) {
-                lca = path2[i];
-            }
-			else break;
-		}
+        reverse(path1.begin(),path1.end());
+        reverse(path2.begin(),path2.end());
         
-        return lca;
+        int i = 0;
+        TreeNode* ans;
+        while( i < min(path1.size(), path2.size()) and path1[i] == path2[i]){
+            ans = path1[i++];
+        }
         
+        return ans;
     }
 };
