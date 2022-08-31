@@ -51,11 +51,11 @@ public:
     vector<vector<int>> pacificAtlantic(vector<vector<int>>& heights) {
         
         X = heights[0].size() , Y = heights.size();
-        // memset(visited,false, sizeof(visited));
+        memset(visited,false, sizeof(visited));
         vector <vector <int> > ret;
         for( int y = 0 ; y < Y ; y++){
             for( int x = 0 ; x < X ; x++){
-                memset(visited,false, sizeof(visited));
+                memset(visited,false, sizeof(visited))  ;
                 if( ( x == 0 or y == 0 or canVisitPacific(heights,x,y)) ){
                     memset(visited,false, sizeof(visited));
                     if( x == X-1 or y == Y-1 or canVisitAtlantic(heights,x,y)){
@@ -64,6 +64,8 @@ public:
                 } 
             }
         }
+        
+        // cout<<canVisitAtlantic(heights,1,2)<<" ";
         
         return ret;
     }
