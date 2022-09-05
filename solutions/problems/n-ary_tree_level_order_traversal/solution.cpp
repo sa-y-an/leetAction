@@ -19,36 +19,28 @@ public:
 */
 
 class Solution {
-    unordered_map <Node*,int> level;
 public:
     vector<vector<int>> levelOrder(Node* root) {
         
-        if( not root) return {};
+        if(!root)
+            return {};
         
-        vector <vector <int>> levelArr;
-        
+        vector <vector <int>> ans;
         queue <Node*> q;
         q.push(root);
-        level[root] = 0;
-        levelArr.push_back({});
-        levelArr[0].push_back(root->val);
         
-        while( not q.empty()){
+        while( !q.empty()){
             
-            auto curr = q.front();
-            q.pop();
-            if( curr == nullptr) continue;
-            
-            
-            for( auto child : curr->children){
-                level[child] = level[curr] + 1;
-                if( levelArr.size() <= level[child] ) levelArr.push_back({});
-                levelArr[level[child]].push_back(child->val);
-                q.push(child);
+            int sz = q.size();
+            vector <int> level;
+            for( ; sz-- ; q.pop()){
+                auto curr = q.front();
+                level.push_back(curr->val);
+                for( auto node : curr->children )
+                    q.push(node);
             }
+            ans.push_back(level);
         }
-        
-        return levelArr;
-        
+        return ans;
     }
 };
