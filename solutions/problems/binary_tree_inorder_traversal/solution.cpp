@@ -10,20 +10,21 @@
  * };
  */
 class Solution {
+    vector <int> ans;
 public:
     
-    vector<int> ret;
+    void inOrder(TreeNode* root){
+        
+        if(!root)
+            return;
+        
+        inOrder(root->left);
+        ans.push_back(root->val);
+        inOrder(root->right);
+    }
     
     vector<int> inorderTraversal(TreeNode* root) {
-        
-        
-        
-        if( root == NULL ) return {};        
-        inorderTraversal(root->left);
-        ret.push_back(root->val);
-        inorderTraversal(root->right);
-        
-        
-        return ret;
+        inOrder(root);
+        return ans;
     }
 };
