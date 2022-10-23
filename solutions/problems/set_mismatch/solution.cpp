@@ -1,24 +1,18 @@
 class Solution {
 public:
-    vector<int> findErrorNums(vector<int>& arr) {
-        long long n = arr.size();
-        int repeat = n+1;
-
-        for( int i = 0 ; i < arr.size() ; i++){
-            int idx = abs(arr[i])-1;
-            if( arr[idx] < 0 ) {
-                repeat = idx+1;
+    vector<int> findErrorNums(vector<int>& nums) {
+        int n = nums.size();
+        int dup = -1;
+        long long total = accumulate(nums.begin(), nums.end(), 0*1LL);
+        for( int i = 0 ; i < n  ; i++){
+            int idx = abs(nums[i]) - 1;
+            if ( nums[idx] < 0 ){
+                dup = idx+1;
                 break;
             }
-            arr[idx] *= -1;
+            nums[idx] *= -1;
         }
-
-        long long theory = (n*(n+1)*1LL)/2;
-        long long acc =0;
-
-        for( int x : arr) acc += abs(x);
-
-        int missing = theory-(acc-repeat);
-        return {repeat,missing};
+        
+        return {dup, (int) ((n*(n+1))/2-(total-dup))};
     }
 };
