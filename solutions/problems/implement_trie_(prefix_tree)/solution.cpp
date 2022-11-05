@@ -1,45 +1,38 @@
 class Trie {
-    struct Node{
-        Node* child[26];
-        bool isEnd = false;
-    };
-    Node* root;
+    Trie* children[26] = {NULL};
+    bool isEnd;
 public:
-    
     Trie() {
-        root = new Node();
+        isEnd = false;
     }
     
     void insert(string word) {
-        
-        Node* node = root;
+        Trie* node = this;
         for( char ch : word ){
-            if( !node->child[ch-'a'] ){
-                node->child[ch-'a'] = new Node();
-            }
-            node = node->child[ch-'a'];
+            if( !node->children[ch-'a'])
+                node->children[ch-'a'] = new Trie();
+            node = node->children[ch-'a'];
         }
-        node->isEnd = true;
+        node->isEnd = true;    
     }
     
     bool search(string word) {
-        
-        Node* node = root;
-        for( char ch : word ){
-            if( !node->child[ch-'a'])
+        Trie* node = this;
+        for( char ch : word){
+            if( !node->children[ch-'a'])
                 return false;
-            node = node->child[ch-'a'];
+            node = node->children[ch-'a'];
         }
-        return node->isEnd;
+
+        return node->isEnd;    
     }
     
     bool startsWith(string prefix) {
-        
-        Node* node = root;
-        for( char ch : prefix ){
-            if( !node->child[ch-'a'])
+        Trie* node = this;
+        for( char ch : prefix){
+            if( !node->children[ch-'a'])
                 return false;
-            node = node->child[ch-'a'];
+            node = node->children[ch-'a'];
         }
         return true;
     }
