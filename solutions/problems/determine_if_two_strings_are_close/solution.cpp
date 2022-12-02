@@ -1,6 +1,7 @@
 class Solution {
 public:
     bool closeStrings(string word1, string word2) {
+        
         unordered_map <char, int> umap1 , umap2;
         for( auto i : word1) umap1[i]++;
         for( auto i : word2) umap2[i]++;
